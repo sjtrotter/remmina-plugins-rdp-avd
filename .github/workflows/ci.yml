@@ -35,7 +35,7 @@ jobs:
         run: scripts/make-srpm.sh rpm/remmina-plugins-rdp-avd.spec out/
       - name: Install BuildRequires
         run: dnf -y builddep out/remmina-plugins-rdp-avd-*.src.rpm
-      - name: Rebuild plugin RPM (runs %check: linkage + smart-card strings)
+      - name: "Rebuild plugin RPM (%check linkage + smart-card strings)"
         run: rpmbuild --rebuild out/remmina-plugins-rdp-avd-*.src.rpm
       - uses: actions/upload-artifact@v4
         with:
