@@ -1,27 +1,60 @@
 name: ci
-on: [push, pull_request]
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
 jobs:
-  rpm:
+  patch-check:
+    runs-on: ubuntu-latest
+    container: fedora:44
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install tools
+        run: dnf -y install patch curl tar jq
+      - name: Series applies cleanly to the pinned base
+        run: |
+          set -euo pipefail
+          commit=$(jq -r .base.commit sources.json)
+          curl -fsSL "https://gitlab.com/Remmina/Remmina/-/archive/${commit}/Remmina-${commit}.tar.gz" -o base.tgz
+          tar xf base.tgz
+          cd "Remmina-${commit}"
+          for p in ../patches/00*.patch; do
+            echo "applying $(basename "$p")"; patch -p1 < "$p"
+          done
+          echo "OK: all patches apply to ${commit}"
+
+  plugin-rpm:
     runs-on: ubuntu-latest
     container: fedora:44
     steps:
       - uses: actions/checkout@v4
       - name: Install build tooling
-        run: dnf -y install rpm-build rpmdevtools mock dnf-plugins-core git patch
-      - name: Verify de-branded series applies to the pinned base
-        run: |
-          set -e
-          source <(grep -oE '"commit": *"[0-9a-f]+"' sources.json | tr -d '", ' | sed 's/commit:/commit=/')
-          curl -fsSL "https://gitlab.com/Remmina/Remmina/-/archive/${commit}/Remmina-${commit}.tar.gz" -o base.tar.gz
-          tar xf base.tar.gz
-          cd "Remmina-${commit}"
-          for p in ../patches/00*.patch; do patch -p1 < "$p"; done
-      - name: Build base SRPM + plugin SRPM
-        run: |
-          scripts/make-srpm.sh rpm/remmina.spec out/
-          scripts/make-srpm.sh rpm/remmina-plugins-rdp-avd.spec out/
-      - name: Build plugin RPM in mock (asserts linkage + smart-card strings via %check)
-        run: |
-          dnf -y copr enable @remmina/... || true   # base deps; or build base first
-          mock -r fedora-44-x86_64 --rebuild out/remmina-plugins-rdp-avd-*.src.rpm || \
-            echo "NOTE: plugin build needs the base remmina-devel; build rpm/remmina.spec first in the same mock root."
+        run: dnf -y install rpm-build rpmdevtools 'dnf-command(builddep)'
+      - name: Build plugin SRPM
+        run: scripts/make-srpm.sh rpm/remmina-plugins-rdp-avd.spec out/
+      - name: Install BuildRequires
+        run: dnf -y builddep out/remmina-plugins-rdp-avd-*.src.rpm
+      - name: Rebuild plugin RPM (runs %check: linkage + smart-card strings)
+        run: rpmbuild --rebuild out/remmina-plugins-rdp-avd-*.src.rpm
+      - uses: actions/upload-artifact@v4
+        with:
+          name: plugin-rpm
+          path: ~/rpmbuild/RPMS/*/remmina-plugin-rdp-*.rpm
+          if-no-files-found: warn
+
+  base-rpm:
+    # Heavier full-Remmina build — on demand / nightly, not every PR.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    container: fedora:44
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install build tooling
+        run: dnf -y install rpm-build rpmdevtools 'dnf-command(builddep)'
+      - name: Build base SRPM
+        run: scripts/make-srpm.sh rpm/remmina.spec out/
+      - name: Install BuildRequires
+        run: dnf -y builddep out/remmina-*.src.rpm
+      - name: Rebuild base RPMs
+        run: rpmbuild --rebuild out/remmina-*.src.rpm

@@ -1,0 +1,20 @@
+name: release
+on:
+  push:
+    tags: ['v*']
+jobs:
+  srpms:
+    runs-on: ubuntu-latest
+    container: fedora:44
+    steps:
+      - uses: actions/checkout@v4
+      - run: dnf -y install rpm-build rpmdevtools jq
+      - name: Build both SRPMs
+        run: |
+          scripts/make-srpm.sh rpm/remmina.spec out/
+          scripts/make-srpm.sh rpm/remmina-plugins-rdp-avd.spec out/
+      - name: Publish SRPMs to the GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: out/*.src.rpm
+    # COPR rebuilds from this repo via its own SCM webhook on the tag; see docs/ci-cd.md.

@@ -36,7 +36,7 @@ Fedora; PPA for Debian/Ubuntu and AUR for Arch to follow). Its outputs:
 patches/     de-branded RDP series (SSOT) — equivalent to the Remmina upstream MR candidates
 rpm/         remmina.spec (base) + remmina-plugins-rdp-avd.spec (plugin)
 deb/ arch/   PPA / AUR packaging (to follow)
-docs/        avd-cloud-constants.md (constants + provenance), rdp-file-parity.md, base-and-patches.md
+docs/        avd-cloud-constants.md · rdp-file-parity.md · base-and-patches.md · ci-cd.md
 scripts/     make-srpm.sh (assemble an SRPM from a spec + patches/ + Source0)
 .copr/       COPR build entry
 ```
