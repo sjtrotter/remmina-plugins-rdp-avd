@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "description": "remmina-plugins-rdp-avd: pins and minimum versions. SSOT for both specs and CI.",
+  "package": {
+    "name": "remmina-plugins-rdp-avd",
+    "provides": "remmina-plugins-rdp",
+    "plugin_version": "1.4.43^142.g030946c83",
+    "plugin_release": 1
+  },
+  "base": {
+    "project": "remmina",
+    "note": "A Remmina base with the RDP AAD web-auth code (plugins/rdp/rdp_web_auth.c). NO released Remmina tag has it; it lives on master after the v1.4.43 tag. This repo therefore ships its own base on every distro.",
+    "commit": "030946c83fe1b7218a21b6d32f9c975b243b7031",
+    "git_describe": "v1.4.43-142-g030946c83",
+    "evr": "1.4.43^142.g030946c83-1",
+    "sha256": "8976850314dddab8cfe74f413233a712e7ba4b6ccf72b56cbf635b51f1ea2801",
+    "url": "https://gitlab.com/Remmina/Remmina/-/archive/030946c83fe1b7218a21b6d32f9c975b243b7031/Remmina-030946c83fe1b7218a21b6d32f9c975b243b7031.tar.gz",
+    "license": "GPL-2.0-or-later"
+  },
+  "minimum_versions": {
+    "remmina": {
+      "value": "1.4.43^142.g030946c83 (this repo's base package)",
+      "why": "The plugin extends Remmina's RDP AAD web-auth path, absent from every released Remmina. Stock distro Remmina cannot host this plugin; install this repo's base."
+    },
+    "freerdp": {
+      "value": "3.16.0",
+      "tested": "3.30.0",
+      "why": "GatewayAvdScope / GatewayAvdAccessAadFormat were added in FreeRDP 3.16.0. Linked against the distribution's own FreeRDP 3."
+    }
+  },
+  "patches": [
+    "0001-RDP-preserve-protected-RDPW-settings.patch",
+    "0002-RDP-select-Azure-US-Government-AVD-authentication.patch",
+    "0003-RDP-honor-configured-AVD-scope-and-redirect-format.patch",
+    "0004-RDP-bind-and-own-OAuth-callback-results.patch",
+    "0005-RDP-handle-PKCS11-client-certificates-in-WebKit.patch",
+    "0006-RDP-extend-ARM-gateway-response-timeout.patch",
+    "0007-RDP-test-the-protected-connection-file-helpers.patch"
+  ],
+  "patch_base_status": "REBASE-REQUIRED: patches were exported against master c620366ed and do NOT apply to 030946c8 (verified: 0001 fails 2/3 hunks). Rebase onto 030946c8 before release."
+}

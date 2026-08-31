@@ -1,0 +1,6 @@
+/out/
+/build/
+*.rpm
+*.src.rpm
+*.tar.gz
+Remmina-*/

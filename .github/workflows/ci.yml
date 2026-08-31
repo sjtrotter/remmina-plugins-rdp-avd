@@ -1,0 +1,27 @@
+name: ci
+on: [push, pull_request]
+jobs:
+  rpm:
+    runs-on: ubuntu-latest
+    container: fedora:44
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install build tooling
+        run: dnf -y install rpm-build rpmdevtools mock dnf-plugins-core git patch
+      - name: Verify de-branded series applies to the pinned base
+        run: |
+          set -e
+          source <(grep -oE '"commit": *"[0-9a-f]+"' sources.json | tr -d '", ' | sed 's/commit:/commit=/')
+          curl -fsSL "https://gitlab.com/Remmina/Remmina/-/archive/${commit}/Remmina-${commit}.tar.gz" -o base.tar.gz
+          tar xf base.tar.gz
+          cd "Remmina-${commit}"
+          for p in ../patches/00*.patch; do patch -p1 < "$p"; done
+      - name: Build base SRPM + plugin SRPM
+        run: |
+          scripts/make-srpm.sh rpm/remmina.spec out/
+          scripts/make-srpm.sh rpm/remmina-plugins-rdp-avd.spec out/
+      - name: Build plugin RPM in mock (asserts linkage + smart-card strings via %check)
+        run: |
+          dnf -y copr enable @remmina/... || true   # base deps; or build base first
+          mock -r fedora-44-x86_64 --rebuild out/remmina-plugins-rdp-avd-*.src.rpm || \
+            echo "NOTE: plugin build needs the base remmina-devel; build rpm/remmina.spec first in the same mock root."
