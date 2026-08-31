@@ -102,6 +102,12 @@ package and links the distribution's FreeRDP 3 and WebKit2GTK 4.1.
 %build
 # Same base flags as the vanilla remmina build, plus AAD + PIV web sign-in
 # (WITH_SSO_MIB=OFF: WebKit browser path only). Only the RDP plugin is built.
+# The monorepo configure treats find_suggested_package() deps as REQUIRED
+# unless disabled (WITH_<PKG>=OFF), so every core-app dependency the RDP plugin
+# does not use is turned off here — otherwise configure fails in a clean chroot
+# on gcrypt/libvncserver/cups/appindicator/avahi even though only the RDP
+# plugin target is built. Verified: with these flags the plugin builds against
+# only this spec's BuildRequires.
 %cmake \
     -DCMAKE_INSTALL_LIBDIR=%{_lib} \
     -DCMAKE_INSTALL_PREFIX=%{_prefix} \
@@ -111,7 +117,19 @@ package and links the distribution's FreeRDP 3 and WebKit2GTK 4.1.
     -DWITH_SSO_MIB=OFF \
     -DWITH_GETTEXT=ON \
     -DWITH_NEWS=OFF \
-    -DWITH_KIOSK_SESSION=OFF
+    -DWITH_KIOSK_SESSION=OFF \
+    -DWITH_GCRYPT=OFF \
+    -DWITH_LIBSODIUM=OFF \
+    -DWITH_LIBVNCSERVER=OFF \
+    -DWITH_CUPS=OFF \
+    -DWITH_AVAHI=OFF \
+    -DHAVE_LIBAPPINDICATOR=OFF \
+    -DWITH_SPICE=OFF \
+    -DWITH_WWW=OFF \
+    -DWITH_X2GO=OFF \
+    -DWITH_KF5WALLET=OFF \
+    -DWITH_VTE=OFF \
+    -DWITH_PYTHONLIBS=OFF
 %cmake_build --target remmina-plugin-rdp
 
 %install

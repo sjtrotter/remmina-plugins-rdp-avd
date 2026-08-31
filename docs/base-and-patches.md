@@ -43,3 +43,20 @@ mock -r fedora-44-x86_64 out/remmina-plugins-rdp-avd-*.src.rpm
 ```
 
 Hardware validation (real Gov AVD + PIV card) is a separate, human-run gate.
+
+## Verified locally (2026-08-31)
+
+Against a pristine `c620366ed` export with all 7 patches applied and FreeRDP 3.31:
+
+- all 7 patches apply clean (`patch -p1`);
+- `remmina-plugin-rdp` compiles with `-DWITH_RDP_AUTH_AAD=ON -DWITH_SSO_MIB=OFF`;
+- the `.so` links `libfreerdp3.so.3` + `libwebkit2gtk-4.1.so.0` and contains the
+  `smartcard-auth:` reason codes, `p11tool`, and PKCS #11 certificate handling
+  (the plugin `%check` assertions), plus the AVD Gov constants
+  (`login.microsoftonline.us`, `wvd.azure.us`).
+
+The plugin `%build` disables every `find_suggested_package()` core-app dependency
+the RDP plugin does not use (gcrypt, libvncserver, cups, appindicator, avahi, …);
+without that, configure fails in a clean chroot because Remmina treats suggested
+packages as REQUIRED unless `-DWITH_<PKG>=OFF`. A full `mock`/COPR build against
+the distribution FreeRDP is the remaining CI step.
