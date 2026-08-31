@@ -21,7 +21,7 @@ Fedora; PPA for Debian/Ubuntu and AUR for Arch to follow). Its outputs:
 
 ## Minimum versions — and why we ship our own base
 
-- **Remmina:** this repo's base package (`1.4.43^142.g030946c83`). The plugin
+- **Remmina:** this repo's base package (`1.4.43^144.gc620366ed`). The plugin
   extends Remmina's RDP **AAD web-auth** path (`plugins/rdp/rdp_web_auth.c`),
   which is **absent from every *released* Remmina** — it lives on master after
   the v1.4.43 tag. **No stock distro Remmina can host this plugin**, so the
@@ -41,12 +41,13 @@ scripts/     make-srpm.sh (assemble an SRPM from a spec + patches/ + Source0)
 .copr/       COPR build entry
 ```
 
-## Status / open build-blocker
+## Status
 
-The de-branded series in `patches/` was exported against Remmina master
-`c620366ed` and **does not yet apply to the pinned `030946c8` base** (verified:
-0001 fails 2/3 hunks). It must be **rebased onto `030946c8`** before the plugin
-builds. See `docs/base-and-patches.md`.
+All 7 patches apply cleanly to the pinned base `c620366ed` (`v1.4.43-144`);
+see `docs/base-and-patches.md`. Remaining before a release: build both SRPMs +
+mock build (`.github/workflows/ci.yml`) and a human-run hardware validation on a
+real Gov AVD + PIV card (the de-branded plugin is behaviorally equivalent to the
+hardware-tested downstream build but is a distinct binary, so it re-validates).
 
 ## Relationship to upstream Remmina
 

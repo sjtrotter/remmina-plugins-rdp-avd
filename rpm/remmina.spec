@@ -4,13 +4,13 @@
 # bumped to the pinned Remmina 1.4.43 snapshot recorded in
 # sources.json:
 #
-#   commit 030946c83fe1b7218a21b6d32f9c975b243b7031  ( = git describe v1.4.43-142-g030946c83 )
+#   commit c620366ed85def5c3de2549eec7fcbef577281d8  ( = git describe v1.4.43-144-gc620366ed )
 #
 # Rationale for the pinned snapshot rather than the bare v1.4.43 release tag
 # (7be0cf2348d149c6bf5bd882fe91d3bec7d6aebb): the RDP AAD web-authentication
 # code the companion remmina-plugins-rdp-avd package extends
 # (plugins/rdp/rdp_web_auth.c) does NOT exist at the v1.4.43 tag; it landed on
-# master afterwards and is present in this 030946c8 snapshot. Building both the
+# master afterwards and is present in this c620366e snapshot. Building both the
 # base and the plugin from this identical source is what makes them ABI-matched.
 # This is a VANILLA build (no EITaaS patches, WITH_RDP_AUTH_AAD off by default) —
 # it is the clean base whose remmina-plugins-rdp the -piv package replaces.
@@ -20,23 +20,23 @@
 # source/EVR and this changelog head differ (the historical Fedora changelog
 # below is trimmed to the most recent entry).
 #
-# EVR: snapshot versioning 1.4.43^142.g030946c83-1 -- the "^142.g030946c83"
+# EVR: snapshot versioning 1.4.43^144.gc620366ed-1 -- the "^144.gc620366ed"
 # marks a post-v1.4.43 snapshot, so it sorts ABOVE both Fedora stock
 # (1.4.41-2) and any future real 1.4.43-1, and BELOW 1.4.44. The companion
 # remmina-plugins-rdp-avd Requires this exact EVR, so the base and the plugin
 # MUST always be built and released together.
 
-%global commit 030946c83fe1b7218a21b6d32f9c975b243b7031
+%global commit c620366ed85def5c3de2549eec7fcbef577281d8
 
 Name: remmina
-Version: 1.4.43^142.g030946c83
+Version: 1.4.43^144.gc620366ed
 Release: 1%{?dist}
 Summary: Remote Desktop Client
 License: GPL-2.0-or-later and MIT
 URL: https://remmina.org
 
 # Pinned snapshot archive (sha256 recorded in sources.json:
-# 8976850314dddab8cfe74f413233a712e7ba4b6ccf72b56cbf635b51f1ea2801)
+# cc3475fd36ed2618bfa55d66506391732175f37c75e8b1240464034b464938d2)
 Source0: https://gitlab.com/Remmina/Remmina/-/archive/%{commit}/Remmina-%{commit}.tar.gz
 
 # Cmake helper file to easy build plugins outside remmina source tree
@@ -381,10 +381,10 @@ appstream-util validate-relax --nonet %{buildroot}/%{_datadir}/metainfo/*.appdat
 %{_mandir}/man1/remmina-gnome.1*
 
 %changelog
-* Mon Aug 31 2026 remmina-plugins-rdp-avd <noreply@example.invalid> - 1.4.43^142.g030946c83-1
+* Mon Aug 31 2026 remmina-plugins-rdp-avd <noreply@example.invalid> - 1.4.43^144.gc620366ed-1
 - remmina-plugins-rdp-avd base build.
-- Bump to the pinned Remmina 1.4.43 snapshot 030946c8 (git describe
-  v1.4.43-142-g030946c83) recorded in sources.json; the RDP
+- Bump to the pinned Remmina 1.4.43 snapshot c620366e (git describe
+  v1.4.43-144-gc620366ed) recorded in sources.json; the RDP
   AAD web-auth code the remmina-plugins-rdp-avd package extends is present in
   this snapshot but not in the bare v1.4.43 release tag.
 - Vanilla build (no EITaaS patches); packaging unchanged from Fedora's

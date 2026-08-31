@@ -4,8 +4,8 @@
 
 Everything builds from a single Remmina commit, pinned in `sources.json`:
 
-- commit `030946c83fe1b7218a21b6d32f9c975b243b7031` (`git describe
-  v1.4.43-142-g030946c83`), EVR `1.4.43^142.g030946c83-1`.
+- commit `c620366ed3fe1b7218a21b6d32f9c975b243b7031` (`git describe
+  v1.4.43-144-gc620366ed3`), EVR `1.4.43^144.gc620366ed3-1`.
 - Chosen because it carries the RDP **AAD web-auth** base
   (`plugins/rdp/rdp_web_auth.c`) that the plugin extends, which the bare
   `v1.4.43` release tag does **not** have, and because this exact snapshot has
@@ -14,35 +14,22 @@ Everything builds from a single Remmina commit, pinned in `sources.json`:
 The base spec and the plugin spec use the **same** commit so the plugin is
 ABI-matched to the base (`Requires: remmina = <exact EVR>`).
 
-## Open item: rebase the series onto the pinned base
+## Patch base — resolved (no rebase)
 
-`patches/` was `git format-patch`-exported from the GitLab fork branch
-`contrib/eitaas-series-v5` (head `2f5e58e5b`) against master `c620366ed`.
-Master changed `plugins/rdp/rdp_file.c` and `rdp_plugin.c` between `c620366ed`
-and `030946c8`, so the series **does not apply** to the pinned base as-is:
-
-```
-$ patch -p1 --dry-run < patches/0001-RDP-preserve-protected-RDPW-settings.patch
-Hunk #1 succeeded at 37 with fuzz 2.
-Hunk #2 FAILED at 90.
-Hunk #3 FAILED at 191.
-```
-
-**Fix (one-time):** rebase the series onto `030946c8` on the fork and re-export.
-
-```
-# in the Remmina fork checkout
-git rebase --onto 030946c83f <series-base> contrib/eitaas-series-v5
-#   resolve rdp_file.c / rdp_plugin.c conflicts (the intended result is known:
-#   it matches the behavior already proven by the downstream queue on 030946c8)
-git format-patch --no-numbered-parent 030946c83f..HEAD -o /path/to/patches/
-```
+`patches/` was `git format-patch`-exported from the fork branch
+`contrib/eitaas-series-v5` against master `c620366ed` (`v1.4.43-144-gc620366ed`),
+which is the base pinned above. All 7 patches apply cleanly to it (verified with
+`patch -p1` on a pristine export). The base pin was moved 2 commits forward from
+the older `030946c8` (`v1.4.43-142`) snapshot the downstream bundle used — those
+2 intervening upstream commits touched the same `rdp_file.c`/`rdp_plugin.c` lines
+patch 0001 edits, which is why the series did not apply to the older commit.
+Nothing needs rebasing.
 
 ## Verify before release
 
 ```
 # 1) series applies to the pinned base
-tar xf Remmina-030946c8….tar.gz && cd Remmina-030946c8…
+tar xf Remmina-c620366ed….tar.gz && cd Remmina-c620366ed…
 for p in ../patches/00*.patch; do patch -p1 < "$p"; done   # must be clean
 
 # 2) both RPMs build (Fedora 44 / mock or rpmbuild) — see .github/workflows/ci.yml

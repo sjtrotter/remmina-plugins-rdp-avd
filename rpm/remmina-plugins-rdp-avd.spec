@@ -17,8 +17,8 @@
 # The only file installed is the patched remmina-plugin-rdp.so; the RDP emblem
 # icons are shipped by the core `remmina` package.
 
-%global commit 030946c83fe1b7218a21b6d32f9c975b243b7031
-%global base_version 1.4.43^142.g030946c83
+%global commit c620366ed85def5c3de2549eec7fcbef577281d8
+%global base_version 1.4.43^144.gc620366ed
 %global base_release 1%{?dist}
 # The remmina-plugins-rdp capability EVR this package provides/obsoletes: one
 # release above the base plugin (release 1) so a plain `dnf install` obsoletes
@@ -137,7 +137,7 @@ echo "OK: linkage and smart-card strings present"
 %{_libdir}/remmina/plugins/remmina-plugin-rdp.so
 
 %changelog
-* Mon Aug 31 2026 remmina-plugins-rdp-avd <noreply@example.invalid> - 1.4.43^142.g030946c83-1
+* Mon Aug 31 2026 remmina-plugins-rdp-avd <noreply@example.invalid> - 1.4.43^144.gc620366ed-1
 - Initial drop-in AVD/PIV RDP plugin variant.
 - Built from the pinned Remmina base snapshot with the de-branded RDP series,
   WITH_RDP_AUTH_AAD=ON / WITH_SSO_MIB=OFF, against the distribution FreeRDP 3.30

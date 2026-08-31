@@ -4,22 +4,22 @@
   "package": {
     "name": "remmina-plugins-rdp-avd",
     "provides": "remmina-plugins-rdp",
-    "plugin_version": "1.4.43^142.g030946c83",
+    "plugin_version": "1.4.43^144.gc620366ed",
     "plugin_release": 1
   },
   "base": {
     "project": "remmina",
     "note": "A Remmina base with the RDP AAD web-auth code (plugins/rdp/rdp_web_auth.c). NO released Remmina tag has it; it lives on master after the v1.4.43 tag. This repo therefore ships its own base on every distro.",
-    "commit": "030946c83fe1b7218a21b6d32f9c975b243b7031",
-    "git_describe": "v1.4.43-142-g030946c83",
-    "evr": "1.4.43^142.g030946c83-1",
-    "sha256": "8976850314dddab8cfe74f413233a712e7ba4b6ccf72b56cbf635b51f1ea2801",
-    "url": "https://gitlab.com/Remmina/Remmina/-/archive/030946c83fe1b7218a21b6d32f9c975b243b7031/Remmina-030946c83fe1b7218a21b6d32f9c975b243b7031.tar.gz",
+    "commit": "c620366ed85def5c3de2549eec7fcbef577281d8",
+    "git_describe": "v1.4.43-144-gc620366ed",
+    "evr": "1.4.43^144.gc620366ed-1",
+    "sha256": "cc3475fd36ed2618bfa55d66506391732175f37c75e8b1240464034b464938d2",
+    "url": "https://gitlab.com/Remmina/Remmina/-/archive/c620366ed85def5c3de2549eec7fcbef577281d8/Remmina-c620366ed85def5c3de2549eec7fcbef577281d8.tar.gz",
     "license": "GPL-2.0-or-later"
   },
   "minimum_versions": {
     "remmina": {
-      "value": "1.4.43^142.g030946c83 (this repo's base package)",
+      "value": "1.4.43^144.gc620366ed (this repo's base package)",
       "why": "The plugin extends Remmina's RDP AAD web-auth path, absent from every released Remmina. Stock distro Remmina cannot host this plugin; install this repo's base."
     },
     "freerdp": {
@@ -37,5 +37,5 @@
     "0006-RDP-extend-ARM-gateway-response-timeout.patch",
     "0007-RDP-test-the-protected-connection-file-helpers.patch"
   ],
-  "patch_base_status": "REBASE-REQUIRED: patches were exported against master c620366ed and do NOT apply to 030946c8 (verified: 0001 fails 2/3 hunks). Rebase onto 030946c8 before release."
+  "patch_base_status": "VERIFIED: all 7 patches apply cleanly to the pinned base c620366ed (the series' native base; the base pin was moved 2 commits forward from the older 030946c8 snapshot so no rebase is needed)."
 }
