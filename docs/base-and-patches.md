@@ -60,3 +60,29 @@ the RDP plugin does not use (gcrypt, libvncserver, cups, appindicator, avahi, �
 without that, configure fails in a clean chroot because Remmina treats suggested
 packages as REQUIRED unless `-DWITH_<PKG>=OFF`. A full `mock`/COPR build against
 the distribution FreeRDP is the remaining CI step.
+
+## Why a base Remmina package is required (ABI) — verified 2026-08-31
+
+The plugin is compiled from 1.4.43 source and is ABI-locked to it
+(`Requires: remmina = <exact EVR>`). This is **not** optional and the base
+cannot be dropped for a plugin-only package against stock distro Remmina:
+
+- Between Remmina **1.4.41** (Fedora stock) and **1.4.43**, `RemminaPluginService`
+  gained 5 methods, **appended** to the struct:
+  `plugin_multimon_monitor_count`, `plugin_multimon_monitor_info`,
+  `plugin_multimon_monitor_drawing_area`,
+  `plugin_multimon_monitor_set_drawing_area`, `plugin_multimon_main_monitor_index`.
+- The RDP plugin **calls these in 14 places** (`plugins/rdp/rdp_monitor.c`,
+  `plugins/rdp/rdp_event.c`) on core connection/event paths.
+- Those offsets are past the end of 1.4.41's shorter struct, so a 1.4.43-built
+  plugin on stock 1.4.41 would call out-of-bounds function pointers → crash.
+
+Naming: the base is **vanilla** Remmina (no patches, `WITH_RDP_AUTH_AAD` off) —
+so it is named `remmina`, not `remmina-webkit`/`-avd`; all WebKit/AAD/PIV code is
+in the plugin. It replaces stock Remmina under the `remmina-next` model (EVR
+sorts above stock, below the next real release).
+
+**This is temporary.** Because the struct only appends, once a distro's own
+Remmina reaches >= 1.4.43 the plugin loads on it directly and the base can be
+dropped (ship plugin-only, `Requires: remmina >= 1.4.43`). Track each distro's
+Remmina version; retire the base per-distro as it catches up.
