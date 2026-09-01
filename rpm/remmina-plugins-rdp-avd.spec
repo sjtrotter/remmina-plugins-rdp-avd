@@ -54,6 +54,10 @@ BuildRequires: gcc-c++
 BuildRequires: gettext
 BuildRequires: intltool
 BuildRequires: pkgconfig(freerdp3) >= 3.16.0
+# The FreeRDP cmake package exports imported tool targets (winpr-makecert,
+# winpr-hash); find_package(WinPR) fails without the binaries, so pull the
+# freerdp package that ships them (matches the base spec).
+BuildRequires: freerdp
 BuildRequires: pkgconfig(gtk+-3.0)
 BuildRequires: pkgconfig(json-glib-1.0)
 BuildRequires: pkgconfig(libsecret-1)
