@@ -6,7 +6,7 @@ COPR is the *builder and host*. This mirrors how `remmina-next` and
 ungoogled-chromium ship.
 
 ```
- GitHub repo (this)                 COPR project sjtrotter/remmina-plugins-rdp-avd
+ GitHub repo (this)                 COPR project ki3den/remmina-plugins-rdp-avd
  ─────────────────                  ───────────────────────────────────────────────
  push / PR ─► GitHub Actions CI     tag / push ─► webhook ─► COPR builds 2 packages:
    • patches apply to pinned base                    • remmina            (base)
@@ -31,7 +31,7 @@ CI does **not** publish. No secrets required for the gate.
 
 ## CD (COPR) — the publisher
 
-COPR project `sjtrotter/remmina-plugins-rdp-avd` with **two packages**, each
+COPR project `ki3den/remmina-plugins-rdp-avd` with **two packages**, each
 using COPR's SCM/`make_srpm` method against this repo:
 
 | COPR package | spec | SRPM command |
@@ -42,7 +42,7 @@ using COPR's SCM/`make_srpm` method against this repo:
 - **Chroots:** `fedora-44`, `fedora-rawhide` (`x86_64`; add `aarch64` later).
 - **Trigger:** a GitHub webhook on push to `main`/tags rebuilds both packages.
 - **Install-time ordering:** the plugin `Requires: remmina = <exact EVR>`; both
-  packages live in the one COPR, so `dnf copr enable sjtrotter/remmina-plugins-rdp-avd`
+  packages live in the one COPR, so `dnf copr enable ki3den/remmina-plugins-rdp-avd`
   then `dnf install remmina-plugins-rdp-avd` pulls the base from the same repo
   and its `Obsoletes` swaps the stock RDP plugin. Builds are independent (the
   plugin does not need the base to *build*), so no build-order constraint.
