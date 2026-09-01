@@ -31,6 +31,11 @@ jobs:
       - uses: actions/checkout@v4
       - name: Install build tooling
         run: dnf -y install rpm-build rpmdevtools 'dnf-command(builddep)'
+      - name: Sync buildroot to a consistent version set
+        # The fedora container mixes base-image libs with updates -devel, which
+        # skews FreeRDP/WinPR cmake targets vs installed libs. COPR's mock has a
+        # consistent buildroot and does not need this; it is a container-CI fix.
+        run: dnf -y --refresh upgrade
       - name: Build plugin SRPM
         run: scripts/make-srpm.sh rpm/remmina-plugins-rdp-avd.spec out/
       - name: Install BuildRequires
@@ -52,6 +57,8 @@ jobs:
       - uses: actions/checkout@v4
       - name: Install build tooling
         run: dnf -y install rpm-build rpmdevtools 'dnf-command(builddep)'
+      - name: Sync buildroot to a consistent version set
+        run: dnf -y --refresh upgrade
       - name: Build base SRPM
         run: scripts/make-srpm.sh rpm/remmina.spec out/
       - name: Install BuildRequires
