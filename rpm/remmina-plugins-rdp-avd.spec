@@ -65,6 +65,7 @@ BuildRequires: pkgconfig(x11)
 BuildRequires: pkgconfig(xkbfile)
 BuildRequires: pkgconfig(libcurl)
 BuildRequires: binutils
+BuildRequires: libsodium-devel
 
 # ABI lock: compiled against this exact Remmina build (as stock plugins-rdp
 # pins "Requires: remmina = EVR"); a different remmina build may change the ABI.
@@ -119,7 +120,6 @@ package and links the distribution's FreeRDP 3 and WebKit2GTK 4.1.
     -DWITH_NEWS=OFF \
     -DWITH_KIOSK_SESSION=OFF \
     -DWITH_GCRYPT=OFF \
-    -DWITH_LIBSODIUM=OFF \
     -DWITH_LIBVNCSERVER=OFF \
     -DWITH_CUPS=OFF \
     -DWITH_AVAHI=OFF \
