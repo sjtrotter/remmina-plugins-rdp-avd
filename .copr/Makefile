@@ -1,8 +1,11 @@
-# COPR builds one package per spec. Point each COPR package at this repo with the
-# "make_srpm" method and set SPEC to the spec to build, e.g.:
-#   SPEC=rpm/remmina.spec
-#   SPEC=rpm/remmina-plugins-rdp-avd.spec
-SPEC ?= rpm/remmina-plugins-rdp-avd.spec
+# COPR make_srpm invokes:
+#   make -f .copr/Makefile srpm outdir="<dir>" spec="<abs path to the package's spec>"
+# `spec` is the package's "Spec File" field (e.g. rpm/remmina.spec or
+# rpm/remmina-plugins-rdp-avd.spec) as an absolute path. Each COPR package sets
+# its own spec, so one Makefile serves both packages.
+spec ?= rpm/remmina-plugins-rdp-avd.spec
+outdir ?= .
+
 srpm:
 	dnf -y install rpm-build rpmdevtools || true
-	scripts/make-srpm.sh $(SPEC) $(outdir)
+	./scripts/make-srpm.sh "$(spec)" "$(outdir)"
