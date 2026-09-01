@@ -1,3 +1,6 @@
+# Copyright (C) 2026 Stephen Trotter <https://github.com/sjtrotter>
+# Packaging for remmina-plugins-rdp-avd, GPL-2.0-or-later (see LICENSE, AUTHORS).
+#
 # Remmina 1.4.43 base for the remmina-plugins-rdp-avd variant.
 #
 # This is Fedora's own remmina.spec (remmina-1.4.41-2.fc44) with ONLY the source

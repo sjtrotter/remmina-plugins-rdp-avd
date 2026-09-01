@@ -1,3 +1,6 @@
+# Copyright (C) 2026 Stephen Trotter <https://github.com/sjtrotter>
+# Packaging for remmina-plugins-rdp-avd, GPL-2.0-or-later (see LICENSE, AUTHORS).
+#
 # remmina-plugins-rdp-avd — drop-in RDP plugin with Azure Virtual Desktop
 # (Entra/AAD) support and smart-card (PIV) web sign-in.
 #

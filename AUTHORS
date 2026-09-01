@@ -1,0 +1,17 @@
+# Authors
+
+## Packaging and AVD/PIV integration
+**Stephen Trotter** — GitHub: [sjtrotter](https://github.com/sjtrotter), COPR: ki3den
+Maintainer of `remmina-plugins-rdp-avd`: the packaging (RPM specs, build scripts,
+CI) and the Azure Virtual Desktop / Entra (AAD) authentication and smart-card
+(PIV) web sign-in integration in `patches/`.
+
+Copyright (C) 2026 Stephen Trotter.
+Licensed under GPL-2.0-or-later (see LICENSE), consistent with Remmina.
+
+## Remmina
+Remmina — The GTK Remote Desktop Client — is the work of the Remmina project and
+its contributors (Vic Lee; Marc-André Moreau; Antenore Gatta; Giovanni Panozzo;
+and many others). See LICENSE for the full upstream copyright notices. This
+repository packages a Remmina snapshot and a modified RDP plugin derived from it,
+distributed under the same GPL-2.0-or-later license with the OpenSSL exception.

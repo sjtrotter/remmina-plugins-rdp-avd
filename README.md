@@ -60,4 +60,8 @@ constants and generic Remmina/FreeRDP integration.
 ## License
 
 GPL-2.0-or-later (Remmina-derived) with the OpenSSL linking exception. See
-`LICENSE` and `LICENSE.OpenSSL`.
+`LICENSE`, `LICENSE.OpenSSL`, and `AUTHORS`.
+
+Packaging and AVD/PIV integration: Copyright (C) 2026 Stephen Trotter
+([sjtrotter](https://github.com/sjtrotter)). Remmina is Copyright (C) its authors
+(see `LICENSE`).
