@@ -69,6 +69,7 @@ BuildRequires: pkgconfig(x11)
 BuildRequires: pkgconfig(xkbfile)
 BuildRequires: pkgconfig(libcurl)
 BuildRequires: binutils
+BuildRequires: patchelf
 BuildRequires: libsodium-devel
 
 # ABI lock: compiled against this exact Remmina build (as stock plugins-rdp
@@ -141,6 +142,9 @@ install -d %{buildroot}%{_libdir}/remmina/plugins
 install -p -m 0755 \
     %{_vpath_builddir}/plugins/rdp/remmina-plugin-rdp.so \
     %{buildroot}%{_libdir}/remmina/plugins/remmina-plugin-rdp.so
+# cmake leaves an empty DT_RUNPATH on the .so which Fedora's rpath QA check
+# rejects; it is meaningless in this system-prefix build, so drop it.
+patchelf --remove-rpath %{buildroot}%{_libdir}/remmina/plugins/remmina-plugin-rdp.so
 
 %check
 so=%{buildroot}%{_libdir}/remmina/plugins/remmina-plugin-rdp.so
