@@ -58,8 +58,9 @@ Against a pristine `c620366ed` export with all 7 patches applied and FreeRDP 3.3
 The plugin `%build` disables every `find_suggested_package()` core-app dependency
 the RDP plugin does not use (gcrypt, libvncserver, cups, appindicator, avahi, …);
 without that, configure fails in a clean chroot because Remmina treats suggested
-packages as REQUIRED unless `-DWITH_<PKG>=OFF`. A full `mock`/COPR build against
-the distribution FreeRDP is the remaining CI step.
+packages as REQUIRED unless `-DWITH_<PKG>=OFF`. The full COPR build against the
+distribution FreeRDP has since run for both packages (base and plugin) on
+fedora-43/44/45/rawhide x86_64, all succeeded.
 
 ## Why a base Remmina package is required (ABI) — verified 2026-08-31
 
