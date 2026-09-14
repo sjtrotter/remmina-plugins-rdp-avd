@@ -43,11 +43,18 @@ scripts/     make-srpm.sh (assemble an SRPM from a spec + patches/ + Source0)
 
 ## Status
 
-All 7 patches apply cleanly to the pinned base `c620366ed` (`v1.4.43-144`);
-see `docs/base-and-patches.md`. Remaining before a release: build both SRPMs +
-mock build (`.github/workflows/ci.yml`) and a human-run hardware validation on a
-real Gov AVD + PIV card (the de-branded plugin is behaviorally equivalent to the
-hardware-tested downstream build but is a distinct binary, so it re-validates).
+Shipping. All 7 patches apply cleanly to the pinned base `c620366ed`
+(`v1.4.43-144`); see `docs/base-and-patches.md`. GitHub Actions `ci` is green on
+`main`, both packages build in COPR (`remmina` base + `remmina-plugins-rdp-avd`,
+`1.4.43^144.gc620366ed-1`, chroots fedora-43/44/45/rawhide x86_64), and the
+COPR-built plugin was hardware-validated on 2026-08-31 against a real Gov AVD
+with a PIV card (import `.rdpw` -> certificate + PIN in the web sign-in ->
+desktop).
+
+```sh
+dnf copr enable ki3den/remmina-plugins-rdp-avd
+dnf install --allowerasing remmina-plugins-rdp-avd
+```
 
 ## Relationship to upstream Remmina
 
@@ -56,6 +63,18 @@ The `patches/` series is the same work proposed to Remmina as merge requests
 selection). As those land upstream, the delta here shrinks. This repo carries no
 product branding, private paths, or bundle lifecycle — only public cloud
 constants and generic Remmina/FreeRDP integration.
+
+Three merge requests are open against `Remmina/Remmina`, stacked in this order:
+!2784 (OAuth hardening, ready), !2785 (PKCS#11 client certificates in WebKit,
+draft), !2786 (AVD support, draft). A fourth branch, `contrib/rdp-quality-overrides`
+(per-feature quality/performance overrides), is pushed to the fork but has no MR
+yet.
+
+**`patches/` is behind those branches.** The MR branches took three review fix
+rounds on 2026-09-01 — including AVD-gating the WebView cloud-authority allowlist
+and moving the cloud validate/select to run after the finalized gateway — that
+have not been folded back into `patches/`. Refresh the series from the MR branch
+heads before the next package rebuild.
 
 ## License
 
